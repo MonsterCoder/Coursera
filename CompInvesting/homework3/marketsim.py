@@ -40,14 +40,14 @@ trades.sort(key=lambda d: d[0]*333+d[1]*222+d[2])
 
 length = len(trades) -1
 startday = dt.datetime(trades[0][0], trades[0][1], trades[0][2])
-endday = dt.datetime(trades[length][0], trades[length][1], trades[length][2],16,0)
+endday = dt.datetime(2009, 12, 31,16,0)
 
 # Reading the Data for the list of Symbols.	
 timeofday=dt.timedelta(hours=16)
 timestamps = du.getNYSEdays(startday,endday,timeofday)
 dataobj = da.DataAccess('Yahoo')
 #print timestamps
-close = dataobj.get_data(timestamps, symbols, "close")
+close = dataobj.get_data(timestamps, symbols, "actual_close")
 
 def calholdings(timestamp,holdings, close):
 	value = 0
@@ -63,8 +63,6 @@ for trade in trades:
 	sym = trade[3]
 	timestamp = dt.datetime(trade[0], trade[1], trade[2], 16,0)
 	cost=close[sym][timestamp] * trade[5]
-	if (currenttimestamp==dt.datetime(2011,02,10, 16, 0)) and timestamp != currenttimestamp:
-		print dt.datetime(2011,02,18, 16, 0), cash + calholdings(dt.datetime(2011,02,18, 16, 0), holdings, close)
 
 	if (trade[4]=="Buy"):
 		cash= cash - cost
@@ -81,6 +79,7 @@ for trade in trades:
 	currentvalue= cash + calholdings(timestamp, holdings, close)
 
 #print currenttimestamp, " ", currentvalue
+print dt.datetime(2009,12,31, 16, 0), cash + calholdings(dt.datetime(2009,12,31, 16, 0), holdings, close)
 
 		
 	#price = close[trade[3]][]
