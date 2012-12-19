@@ -16,7 +16,7 @@ storename = "Yahoo" # get data from our daily prices source
 # Available field names: open, close, high, low, close, actual_close, volume
 closefield = "actual_close"
 volumefield = "volume"
-threshhold =5
+threshhold =7
 
 def findEvents(symbols, startday,endday, marketSymbol,verbose=False):
 
@@ -31,7 +31,7 @@ def findEvents(symbols, startday,endday, marketSymbol,verbose=False):
 	close = dataobj.get_data(timestamps, symbols, closefield)
 	
 	# Completing the Data - Removing the NaN values from the Matrix
-#	close = (close.fillna(method='ffill')).fillna(method='backfill')
+	close = (close.fillna(method='ffill')).fillna(method='backfill')
 	
 
 	if verbose:
@@ -46,7 +46,7 @@ def findEvents(symbols, startday,endday, marketSymbol,verbose=False):
 				if (i+5) < len(close[symbol]):
 				   s = close.index[i+5]
 				else:
-				   s = close.index[close[symbol]]
+				   s = close.index[close[symbol]-1]
 
 				print d.year,",",d.month,",",d.day,",", "Buy",",", symbol, 100
 				print s.year,",",s.month,",",s.day,",", "Sell",",", symbol, 100
@@ -67,7 +67,7 @@ symbols.append('SPY')
 
 #symbols =['BFRE','ATCS','RSERF','GDNEF','LAST','ATTUF','JBFCF','CYVA','SPF','XPO','EHECF','TEMO','AOLS','CSNT','REMI','GLRP','AIFLY','BEE','DJRT','CHSTF','AICAF']
 startday = dt.datetime(2008,1,1)
-endday = dt.datetime(2010,01,01)
+endday = dt.datetime(2009,12,31)
 eventMatrix = findEvents(symbols,startday,endday,marketSymbol='SPY',verbose=True)
 
 #eventProfiler = ep.EventProfiler(eventMatrix,startday,endday,lookback_days=20,lookforward_days=20,verbose=True)

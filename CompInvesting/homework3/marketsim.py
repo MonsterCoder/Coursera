@@ -48,6 +48,7 @@ timestamps = du.getNYSEdays(startday,endday,timeofday)
 dataobj = da.DataAccess('Yahoo')
 #print timestamps
 close = dataobj.get_data(timestamps, symbols, "actual_close")
+close = (close.fillna(method='ffill')).fillna(method='backfill')
 
 def calholdings(timestamp,holdings, close):
 	value = 0
